@@ -33,5 +33,20 @@ def drawData(data, currency="dkk"):
     plt.grid()
     plt.show()
 
-btc_data = get_data("bitcoin", "dkk")[0]
-drawData(btc_data)
+crypto_list = get_data(input("enter cryptocurrency> ").lower(), "dkk")
+if crypto_list:
+    if len(crypto_list) > 0:
+        crypto_data = crypto_list[0]
+        drawData(crypto_data)
+else:
+    print("wrong cryptocurrency")
+
+"""
+Why it doesn't work :
+
+>>> crypto_data = get_data(input("enter cryptocurrency> ").lower(), "dkk")[0]
+[]
+>>> if crypto_data:
+        drawData(crypto_data)
+List of index out of range
+"""
