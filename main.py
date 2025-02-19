@@ -34,5 +34,4 @@ def drawData(data, currency="dkk"):
     plt.show()
 
 btc_data = get_data("bitcoin", "dkk")[0]
-print(btc_data)
 drawData(btc_data)
