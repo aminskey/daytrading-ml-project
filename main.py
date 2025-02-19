@@ -17,7 +17,7 @@ def get_data(coin, currency="dkk"):
 
     response = requests.get(url, params=params)
     if response.status_code == 200:
-        return response.json()
+        return response.json()[0]
     else:
         return None
 
@@ -31,15 +31,12 @@ def drawData(data, currency="dkk"):
     plt.title(f"7 Day sparkline of {data['id'].capitalize()}")
     plt.legend()
     plt.grid()
-    plt.show()
 
-crypto_list = get_data(input("enter cryptocurrency> ").lower(), "dkk")
-if crypto_list:
-    if len(crypto_list) > 0:
-        crypto_data = crypto_list[0]
-        drawData(crypto_data)
-else:
-    print("wrong cryptocurrency")
+
+data = get_data(input("enter cryptocurrency> ").lower(), "dkk")
+if data:
+    drawData(data)
+    plt.savefig(f"assets/{data['symbol']}.png")
 
 """
 Why it doesn't work :
