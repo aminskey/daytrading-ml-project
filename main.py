@@ -10,20 +10,22 @@ GIT_TRUE = True
 if GIT_TRUE:
     import git
 
-def setup(wd="./"):
+def setup(wd="./", branch="main"):
     global cwd
     cwd = wd
 
     if GIT_TRUE:
-        repo = git.Repo(".")
+        repo = git.Repo(cwd)
 
         curr_commit = repo.head.commit
-        latest_commit = repo.branches['main']
+        latest_commit = repo.branches[branch].commit
 
         if curr_commit != latest_commit:
             print("Getting latest updates")
             origin = repo.remote()
             origin.pull()
+            print("Restart the program")
+            exit(1)
 
     if not "assets" in listdir(cwd):
         mkdir("assets")
