@@ -1,4 +1,3 @@
-import git
 import requests
 import matplotlib.pyplot as plt
 
@@ -6,19 +5,25 @@ from tkinter import *
 from os import mkdir, listdir
 
 cwd = "./"
-repo = git.Repo(".")
+GIT_TRUE = True
+
+if GIT_TRUE:
+    import git
 
 def setup(wd="./"):
     global cwd
     cwd = wd
 
-    curr_commit = repo.head.commit
-    latest_commit = repo.branches['main']
+    if GIT_TRUE:
+        repo = git.Repo(".")
 
-    if curr_commit != latest_commit:
-        print("Getting latest updates")
-        origin = repo.remote()
-        origin.pull()
+        curr_commit = repo.head.commit
+        latest_commit = repo.branches['main']
+
+        if curr_commit != latest_commit:
+            print("Getting latest updates")
+            origin = repo.remote()
+            origin.pull()
 
     if not "assets" in listdir(cwd):
         mkdir("assets")
