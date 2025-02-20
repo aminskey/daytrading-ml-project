@@ -2,6 +2,17 @@ import requests
 import matplotlib.pyplot as plt
 
 from tkinter import *
+from os import mkdir, listdir
+
+cwd = "./"
+
+def setup(wd="./"):
+    global cwd
+    cwd = wd
+
+    if not "assets" in listdir(cwd):
+        mkdir("assets")
+
 
 def get_data(coin, currency="dkk"):
     url = "https://api.coingecko.com/api/v3/coins/markets"
@@ -32,11 +43,12 @@ def drawData(data, currency="dkk"):
     plt.legend()
     plt.grid()
 
-
-data = get_data(input("enter cryptocurrency> ").lower(), "dkk")
-if data:
-    drawData(data)
-    plt.savefig(f"assets/{data['symbol']}.png")
+if __name__ == "__main__":
+    setup()
+    data = get_data(input("enter cryptocurrency> ").lower(), "dkk")
+    if data:
+        drawData(data)
+        plt.savefig(f"assets/{data['symbol']}.png")
 
 """
 Why it doesn't work :
