@@ -6,10 +6,19 @@ from tkinter import *
 from os import mkdir, listdir
 
 cwd = "./"
+repo = git.Repo(".")
 
 def setup(wd="./"):
     global cwd
     cwd = wd
+
+    curr_commit = repo.head.commit
+    latest_commit = repo.branches['main']
+
+    if curr_commit != latest_commit:
+        print("Getting latest updates")
+        origin = repo.remote()
+        origin.pull()
 
     if not "assets" in listdir(cwd):
         mkdir("assets")
