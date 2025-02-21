@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 import tkinter as tk
 import numpy as np
 
-from os import mkdir, listdir
+from os import mkdir, listdir, chdir
 from PIL import Image, ImageTk
 from form import Form
+from urllib import request
 
-cwd = "./"
+cwd = "."
 GIT_TRUE = False
 root = tk.Tk()
 swap = False
@@ -17,7 +18,7 @@ swap = False
 if GIT_TRUE:
     import git
 
-def setup(wd="./", branch="main"):
+def setup(wd=".", branch="main"):
     global cwd
     cwd = wd
 
@@ -107,7 +108,8 @@ def drawPlot(data, currency="dkk"):
     plt.legend()
     plt.grid()
 
-def drawGraph(data, root, curr="dkk", w=-1, h=-1):
+
+def drawUI(data, root, curr="dkk", w=-1, h=-1):
     if w > 0 and h > 0:
         img = ImageTk.PhotoImage(load_from_buffer().resize((w, h)))
     else:
@@ -116,12 +118,13 @@ def drawGraph(data, root, curr="dkk", w=-1, h=-1):
 
     date, time = data["last_updated"].split("T")
 
+    title = tk.Label(root, text=f"{data['id'].capitalize()}", pady=15, padx=10, font=("Aptos", 25))
     lb = tk.Label(root, image=img, width=w, height=h, borderwidth=7, relief="sunken")
     mark = tk.Label(root, text=f"Last Updated: {time[:8]}")
-    title = tk.Label(root, text=f"{data['id'].capitalize()}", pady=15, padx=10, font=("Aptos", 25))
     btn1 = tk.Button(root, text="Analyze!", pady=10, padx=10, font=("Aptos", 15))
     cryp_form = Form(root, "Enter Cryptocurrency", default=data['id'], labelpad=(5, 0), formpad=(5, 0))
     btn2 = tk.Button(root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: main(cryp_form.get().lower()))
+
 
     convFrame = tk.Frame(root)
 
@@ -164,7 +167,7 @@ def main(coin="bitcoin", curr="dkk"):
     if data:
         print(data)
         drawPlot(data)
-        drawGraph(data, root)
+        drawUI(data, root)
     exit(1)
 
 if __name__ == "__main__":
