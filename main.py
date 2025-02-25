@@ -95,6 +95,12 @@ def get_data(coin, currency="dkk"):
 def drawPlot(data, currency="dkk"):
     sparkline = data["sparkline_in_7d"]["price"]
 
+    usd_val = sparkline[-1]
+    cus_val = data["current_price"]
+
+    coeff = cus_val/usd_val
+    sparkline = [i*coeff for i in sparkline]
+
     plt.plot(range(0, len(sparkline)), sparkline, label=data["symbol"].upper())
 
     ticks = np.linspace(0, len(sparkline) - 1, 7, dtype=int)
@@ -136,7 +142,6 @@ def drawUI(data, root, curr="dkk", w=-1, h=-1):
     curr_form = Form(formFrame, "Enter Target Currency", default=curr, labelpad=(5, 0), formpad=(5, 0))
 
     btn = tk.Button(root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: main(cryp_form.get().lower(), curr_form.get().lower()))
-
 
     cryp_form.grid(row=0, column=1)
     curr_form.grid(row=1, column=1)
