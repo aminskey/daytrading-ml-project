@@ -118,15 +118,13 @@ def drawUI(data, root, curr="dkk", w=-1, h=-1):
 
     date, time = data["last_updated"].split("T")
 
-    title = tk.Label(root, text=f"{data['id'].capitalize()}", pady=15, padx=10, font=("Aptos", 25))
+    title = tk.Label(root, text=f"{data['id'].capitalize()}", pady=7, padx=10, font=("Aptos", 25))
     lb = tk.Label(root, image=img, width=w, height=h, borderwidth=7, relief="sunken")
     mark = tk.Label(root, text=f"Last Updated: {time[:8]}")
-    btn1 = tk.Button(root, text="Analyze!", pady=10, padx=10, font=("Aptos", 15))
-    cryp_form = Form(root, "Enter Cryptocurrency", default=data['id'], labelpad=(5, 0), formpad=(5, 0))
-    btn2 = tk.Button(root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: main(cryp_form.get().lower()))
 
 
     convFrame = tk.Frame(root)
+    formFrame = tk.Frame(root)
 
     curr_price = data["current_price"]
 
@@ -134,13 +132,20 @@ def drawUI(data, root, curr="dkk", w=-1, h=-1):
     conv2 = Form(convFrame, f"{curr.upper()}", default="0", labelpad=(5, 0), formpad=(5, 0))
     swapBtn = tk.Button(convFrame, text="Swap", command=lambda: update(conv1, conv2, curr_price))
 
+    cryp_form = Form(formFrame, "Enter Cryptocurrency", default=data['id'], labelpad=(5, 0), formpad=(5, 0))
+    curr_form = Form(formFrame, "Enter Target Currency", default=curr, labelpad=(5, 0), formpad=(5, 0))
+
+    btn = tk.Button(root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: main(cryp_form.get().lower(), curr_form.get().lower()))
+
+
+    cryp_form.grid(row=0, column=1)
+    curr_form.grid(row=1, column=1)
 
     lb.grid(row=1, column=1)
     title.grid(row=0, column=1)
     mark.grid(row=2, column=1, sticky="nw")
-    btn1.grid(row=3, column=1, sticky="ne", pady=10)
-    btn2.grid(row=3, column=1, sticky="nw", pady=10)
-    cryp_form.grid(row=3, column=1, sticky="n", padx=10, pady=10)
+    btn.grid(row=3, column=1, sticky="nw", pady=10)
+    formFrame.grid(row=3, column=1, sticky="n", padx=10, pady=10)
 
     conv1.grid(row=1, column=0, padx=10, pady=(0, 5), sticky="nw")
     conv2.grid(row=0, column=0, padx=10, pady=(5, 0), sticky="nw")
@@ -163,11 +168,10 @@ def main(coin="bitcoin", curr="dkk"):
     plt.clf()
 
     setup()
-    data = get_data(coin, "dkk")
+    data = get_data(coin, curr)
     if data:
-        print(data)
-        drawPlot(data)
-        drawUI(data, root)
+        drawPlot(data, curr)
+        drawUI(data, root, curr)
     exit(1)
 
 if __name__ == "__main__":
