@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import tkinter as tk
-import git
+
 from os import mkdir, listdir
-from variables import *
 
 class Controller:
     def __init__(self, model, view):
