@@ -5,6 +5,9 @@ import io
 from PIL import Image
 
 class Model:
+    def __init__(self):
+        self.controller = None
+
     def get_data(self, coin, currency="dkk"):
         url = "https://api.coingecko.com/api/v3/coins/markets"
         params = {
