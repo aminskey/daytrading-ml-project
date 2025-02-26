@@ -1,7 +1,6 @@
 import tkinter as tk
 from PIL import ImageTk
 from form import Form
-from model import Model
 
 class View:
     def __init__(self, root, controller):

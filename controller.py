@@ -9,33 +9,28 @@ class Controller:
         self.model = model
         self.view = view
         self.swap = False
+        self.wd = "."
         
     def main(self, coin="bitcoin", curr="dkk"):
         for child in self.view.root.winfo_children():
             child.destroy()
         plt.clf()
+
         self.setup()
         data = self.model.get_data(coin, curr)
+
         if data:
             self.model.drawPlot(data, curr)
             self.view.drawUI(data, self.view.root, curr)
         exit(1)
     
-    def setup(self, wd=".", branch="main"):
-        global cwd
-        cwd = wd
-        if GIT_TRUE:
-            repo = git.Repo(cwd)
-            curr_commit = repo.head.commit
-            latest_commit = repo.branches[branch].commit
-            if curr_commit != latest_commit:
-                print("Getting latest updates")
-                origin = repo.remote()
-                origin.pull()
-                print("Restart the program")
-                exit(1)
-        if not "assets" in listdir(cwd):
+    def setup(self, wd="."):
+
+        self.wd = wd
+
+        if not "assets" in listdir(self.wd):
             mkdir("assets")
+
         self.view.root.protocol("WM_DELETE_WINDOW", self.on_closing)
     
     def on_closing(self):

@@ -6,11 +6,12 @@ from controller import Controller
 if __name__ == "__main__":
     root = tk.Tk()
     model = Model()
+
     view = View(root, None)
     controller = Controller(model, view)
     view.controller = controller
+
     controller.main()
-    root.mainloop()
 
 """
 Why it doesn't work :
