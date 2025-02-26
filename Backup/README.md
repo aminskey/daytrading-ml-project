@@ -1,2 +1,0 @@
-# daytrading-ml-project
-hello
