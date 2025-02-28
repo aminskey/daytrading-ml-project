@@ -1,5 +1,4 @@
 import tkinter as tk
-import asyncio
 
 from PIL import ImageTk
 from form import Form
@@ -13,10 +12,10 @@ class View:
         self.conv_lbl = ""
         self.stdbg = self.root.cget("background")
 
-    def update(self, conv1, conv2, curr_price, *args):
+    def update(self, conv1, conv2, *args):
         inp = conv1.get()
         if inp.isdigit():
-            conv2.config(text=f"{self.conv_lbl}: {int(inp) * curr_price}")
+            conv2.config(text=f"{self.conv_lbl}: {int(inp) * self.curr_price}")
         else:
             conv2.config(text=f"{self.conv_lbl}: 0")
 
