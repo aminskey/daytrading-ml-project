@@ -34,10 +34,6 @@ class Controller:
     def setup(self, wd="."):
         self.wd = wd
         self.view.root.configure(bg=self.view.stdbg)
-
-        if not "assets" in listdir(self.wd):
-            mkdir("assets")
-
         self.view.root.protocol("WM_DELETE_WINDOW", self.on_closing)
     
     def on_closing(self):
