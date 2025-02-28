@@ -11,17 +11,9 @@ class View:
         self.curr_price = 0
         self.form_lbl = ""
         self.conv_lbl = ""
+        self.stdbg = self.root.cget("background")
 
     def update(self, conv1, conv2, curr_price, *args):
-        """
-        if conv1.id:
-            conv1.trace_remove("write", conv1.id)
-        if self.controller.swap:
-            conv1.trace_add("write",
-                            lambda *args: self.update_conversion(conv2.entry, conv1.entry, 1 / curr_price, *args))
-        self.switchSwap([conv1, conv2])
-        """
-
         inp = conv1.get()
         if inp.isdigit():
             conv2.config(text=f"{self.conv_lbl}: {int(inp) * curr_price}")
@@ -36,21 +28,29 @@ class View:
         label.config(text=self.conv_lbl)
 
 
-    def drawUI(self, data, root, w=-1, h=-1):
-        if w > 0 and h > 0:
-            img = ImageTk.PhotoImage(self.controller.model.load_from_buffer().resize((w, h)))
-        else:
-            img = ImageTk.PhotoImage(self.controller.model.load_from_buffer())
-            w, h = img.width(), img.height()
+    def bluescreen(self, title, sub):
+
+        self.root.configure(bg="blue")
+        title = tk.Label(self.root, fg="white", bg="blue", text=title, pady=10, font=("Consolas", 35, "bold"))
+        subtitle = tk.Label(self.root, fg="white", bg="blue", text=sub, pady=10, padx=(20), font=("Consolas", 20))
+        btn = tk.Button(self.root, text="Reload", font=("Consolas", 16), command= lambda: self.controller.main("bitcoin", "dkk"), padx=10, pady=10)
+
+        title.grid(row=1, column=1)
+        subtitle.grid(row=2, column=1)
+        btn.grid(row=3, column=1)
+
+    def drawUI(self, data):
+        img = ImageTk.PhotoImage(self.controller.model.load_from_buffer())
+        w, h = img.width(), img.height()
 
         date, time = data["last_updated"].split("T")
 
-        title = tk.Label(root, text=f"{data['id'].capitalize()}", pady=7, padx=10, font=("Aptos", 25))
-        lb = tk.Label(root, image=img, width=w, height=h, borderwidth=7, relief="sunken")
-        mark = tk.Label(root, text=f"Last Updated: {time[:8]}")
+        title = tk.Label(self.root, text=f"{data['id'].capitalize()}", pady=7, padx=10, font=("Aptos", 25))
+        lb = tk.Label(self.root, image=img, width=w, height=h, borderwidth=7, relief="sunken")
+        mark = tk.Label(self.root, text=f"Last Updated: {time[:8]}")
 
-        convFrame = tk.Frame(root)
-        formFrame = tk.Frame(root)
+        convFrame = tk.Frame(self.root)
+        formFrame = tk.Frame(self.root)
 
         self.curr_price = data["current_price"]
         swapBtn = tk.Button(convFrame, text="Swap", command=lambda: self.switchSwap(conv_form, conv_label))  # command=lambda: self.update(conv1, conv2, curr_price)
@@ -66,7 +66,7 @@ class View:
         cryp_form = Form(formFrame, "Enter Cryptocurrency", default=data['id'], labelpad=(5, 0), formpad=(5, 0))
         curr_form = Form(formFrame, "Enter Target Currency", default=self.controller.curr, labelpad=(5, 0), formpad=(5, 0))
 
-        btn = tk.Button(root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: self.controller.main(cryp_form.get().lower(), curr_form.get().lower()))
+        btn = tk.Button(self.root, text="Update", pady=10, padx=10, font=("Aptos", 15), command=lambda: self.controller.main(cryp_form.get().lower(), curr_form.get().lower()))
 
         cryp_form.grid(row=0, column=1)
         curr_form.grid(row=1, column=1)
@@ -82,4 +82,4 @@ class View:
         swapBtn.grid(row=3, column=0, padx=10, pady=10)
         convFrame.grid(row=1, column=0, padx=(0, 10))
 
-        root.mainloop()
+        self.root.mainloop()

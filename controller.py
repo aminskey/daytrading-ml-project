@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import tkinter as tk
 
 from os import mkdir, listdir
+from time import sleep
 
 class Controller:
     def __init__(self, model, view):
@@ -10,24 +11,31 @@ class Controller:
         self.swap = False
         self.wd = "."
         self.curr = "dkk"
+        self.count = 0
         
     def main(self, coin="bitcoin", curr="dkk"):
         self.curr = curr
+        self.count += 1
         for child in self.view.root.winfo_children():
             child.destroy()
         plt.clf()
 
         self.setup()
-        data = self.model.get_data(coin, self.curr)
 
-        if data:
+        data = self.model.get_data(coin, self.curr)
+        print(data)
+
+        if "id" in data.keys():
             self.model.drawPlot(data)
-            self.view.drawUI(data, self.view.root)
+            self.view.drawUI(data)
+        elif "error" in data.keys():
+            self.view.bluescreen(data["error"], data["subtitle"])
+            self.view.root.mainloop()
         exit(1)
     
     def setup(self, wd="."):
-
         self.wd = wd
+        self.view.root.configure(bg=self.view.stdbg)
 
         if not "assets" in listdir(self.wd):
             mkdir("assets")
