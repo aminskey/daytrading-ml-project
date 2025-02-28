@@ -53,8 +53,7 @@ class View:
         formFrame = tk.Frame(self.root)
 
         self.curr_price = data["current_price"]
-        swapBtn = tk.Button(convFrame, text="Swap", command=lambda: self.switchSwap(conv_form, conv_label))  # command=lambda: self.update(conv1, conv2, curr_price)
-
+        swapBtn = tk.Button(convFrame, text="Swap", command=lambda: self.switchSwap(conv_form, conv_label))
         self.conv_lbl = f"{self.controller.curr.upper()}"
         self.form_lbl = f"{data['symbol'].upper()}"
 
