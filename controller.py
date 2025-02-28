@@ -11,11 +11,9 @@ class Controller:
         self.swap = False
         self.wd = "."
         self.curr = "dkk"
-        self.count = 0
         
     def main(self, coin="bitcoin", curr="dkk"):
         self.curr = curr
-        self.count += 1
         for child in self.view.root.winfo_children():
             child.destroy()
         plt.clf()
