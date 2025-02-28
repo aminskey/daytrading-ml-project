@@ -27,10 +27,8 @@ class Model:
         response = requests.get(url, params=params)
         if response.status_code == 200:
             data = response.json()
-            if len(data) > 0:
-                return data[0]
-            else:
-                return dict(error="Error Code: -1", subtitle="Couldn't retrieve any information...")
+            return data[0] if len(data) > 0 else dict(error="Error Code: -1", subtitle="Couldn't retrieve any information...")
+
         return dict(error=f"Error Code: {response.status_code}, {self.err_codes[str(response.status_code)]['message']}", subtitle=self.err_codes[str(response.status_code)]['description'])
     def drawPlot(self, data, currency="dkk"):
         sparkline = data["sparkline_in_7d"]["price"]
